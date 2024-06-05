@@ -12,7 +12,7 @@ st.image(('../photos/p-1-lyft-puts-the-brakes-on-some-of-its-citi-bikes-due-to-b
 st.markdown(
     """
     <div style="text-align: center;">
-        <h2>By Kagon Deans DS7</h2>
+        <h2>Kagon Deans DS7</h2>
     </div>
     """,
     unsafe_allow_html=True
@@ -21,25 +21,6 @@ st.markdown(
 # st.page_link(overview, label = 'overview', icon = None)
 
 
-# st.link_button("🚲 Let's take a ride 🚲 ", url  = '/overview') 
+#st.link_button("🚲 Let's take a ride 🚲 ", url  = '/overview') 
 
-
-# Define the target page function
-def overview():
-    st.write("Welcome to the overview page!")
-
-# Set up session state for navigation
-if 'page' not in st.session_state:
-    st.session_state.page = 'bike'
-
-# Define navigation function
-def navigate_to_overview():
-    st.session_state.page = 'overview'
-
-# Main app
-if st.session_state.page == 'bike':
-    if st.button("🚲 Let's take a ride 🚲"):
-        navigate_to_overview()
-    st.write("This is the bike page.")
-elif st.session_state.page == 'overview':
-    overview()
+st.page_link(page  = 'pages/1_overview.py',  label  = "🚲 Let's take a ride 🚲 ")
