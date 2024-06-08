@@ -14,7 +14,7 @@ with tab1:
     st.write("")
     st.write("")
 
-    st.markdown("""Hi everyone, let's break down the citibike data. 
+    st.markdown("""Let's break down the citibike data. 
              In total there were **67,720,005** bike rides. There were **20,551,697** in 2019,
             **19,506,857** in 2020, & **27,661,451** in 2021. """)
 
@@ -104,17 +104,15 @@ with tab2:
     st.write("")
     st.write("")
     st.write("")
-
-    # Grouping by season and summing the number of trips.
+    
+    # Grouping by season and obtaining median trip durations
     seasonal_trips = cb.groupby('season')['median_trip_duration'].median().reset_index()
 
-    st.write("Below is a pie chart that shows the percentage of median trip duration each season:")
-
-    # Plotting
-    fig = px.pie(seasonal_trips, values = 'median_trip_duration', names = 'season', title = 'Median Trip Duration by Season')
+    # Plotting a box plot
+    fig = px.box(cb, x = 'season', y = 'median_trip_duration', title = 'Median Trip Durations by Season')
     fig.update_layout(width = 800, height = 600)
-    
-    # Showing plot
+
+    # Showing the plot
     st.plotly_chart(fig)
 
     st.write("")

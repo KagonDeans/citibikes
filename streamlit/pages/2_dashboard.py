@@ -31,6 +31,7 @@ st.markdown("""Below the features you're able to select are categorical features
 - Did it snow: It did not snow
 - Is it a holiday: It is not a holiday
 
+
 """)
 
 
@@ -62,8 +63,6 @@ feature_name = {
     'Holiday': [
         ['holiday[T.True]'],
         ['Holiday']
-    
-    
     ]
     
 }
@@ -133,7 +132,7 @@ num_of_trips_coeff = pd.DataFrame({
 
 num_of_trips_coeff['Features'] = num_of_trips_coeff['Features'].replace(new_feature_names)
 
-st.dataframe(num_of_trips_coeff)
+st.dataframe(num_of_trips_coeff, height=500, width=400)
 
 
 
@@ -249,17 +248,16 @@ new_feature_names = {
 all_predictors = lm_med_len.params.index.drop('Intercept')  
 all_coefficients = lm_med_len.params.values[1:] 
 
-num_of_trips_coeff = pd.DataFrame({
+median_trip_len_coeff = pd.DataFrame({
     'Features': all_predictors,
     'Coefficients': all_coefficients
 })
 
-num_of_trips_coeff['Features'] = num_of_trips_coeff['Features'].replace(new_feature_names)
+median_trip_len_coeff['Features'] = median_trip_len_coeff['Features'].replace(new_feature_names)
 
-st.dataframe(num_of_trips_coeff)
+st.dataframe(median_trip_len_coeff, height=500, width=400)
 
 #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
 
 
 
