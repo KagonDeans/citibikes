@@ -18,9 +18,4 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# st.page_link(overview, label = 'overview', icon = None)
-
-
-#st.link_button("🚲 Let's take a ride 🚲 ", url  = '/overview') 
-
 st.page_link(page  = 'pages/1_overview.py',  label  = "🚲 Let's take a ride 🚲 ")
