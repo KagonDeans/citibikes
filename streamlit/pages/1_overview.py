@@ -14,19 +14,39 @@ with tab1:
     st.write("")
     st.write("")
 
-    st.markdown("""Let's break down the citibike data. 
-             In total there were **67,720,005** bike rides. There were **20,551,697** in 2019,
-            **19,506,857** in 2020, & **27,661,451** in 2021. """)
+    st.markdown("""
+Let's break down the citibike data:
+
+- 2019: **20,551,697**
+- 2020: **19,506,857**
+- 2021: **27,661,451**
+
+In total, there were **67,720,005** bike rides.
+""")
 
     st.write("")
-    st.write("")
-    st.write("")
+    
+    #adding all years to years list
+    year_options = ['All Years'] + cb['year'].unique().tolist()
 
+    #Select a year
+    select_year = st.selectbox(
+    "Select a year",
+    year_options
+)
+
+    #selected year will show data for that year
+    if select_year == 'All Years':
+        years = cb
+    else:
+        years = cb[cb['year'] == select_year]
+    
+    
     # Days of week
     days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     
     # Grouping by day of the week and summing the number of trips.
-    daily_trips = cb.groupby('day_of_week')['num_of_trips'].sum().reset_index()
+    daily_trips = years.groupby('day_of_week')['num_of_trips'].sum().reset_index()
 
     # Plotting 
     fig = px.bar(daily_trips, x = 'day_of_week', y = 'num_of_trips', 
@@ -45,7 +65,7 @@ with tab1:
     st.write("")
 
     # Grouping by season and summing the number of trips.
-    seasonal_trips = cb.groupby('season')['num_of_trips'].sum().reset_index()
+    seasonal_trips = years.groupby('season')['num_of_trips'].sum().reset_index()
 
     st.write("Below is a pie chart that shows the percentage of trips taken each season:")
 
@@ -78,15 +98,39 @@ with tab1:
 # Tab 2: Time
 with tab2:
     st.title('Time')
-    st.markdown("""
-    - **The median trip duration is 11 minutes**
-    - **Average trip duration: 18.5 minutes**
+    med_trip_dur = cb['median_trip_duration'].median()
+    mean_trip_dur = cb['mean_trip_duration'].mean()
+    yearly_med_trip_dur = cb.groupby('year')['median_trip_duration'].median()
+
+    st.markdown(f"""
+    - **The median trip duration is {med_trip_dur} seconds**
+    - **Average trip duration: {mean_trip_dur} seconds**
     """)
+
+    st.write(yearly_med_trip_dur)
+    
+    
+    
+    #adding all years to years list
+    year_options = ['All Years'] + cb['year'].unique().tolist()
+
+    #Select a year
+    select_year_med = st.selectbox(
+    "Select year",
+    year_options
+)
+
+    #selected year will show data for that year
+    if select_year_med == 'All Years':
+        years = cb
+    else:
+        years = cb[cb['year'] == select_year_med]
+    
     # days of week
     days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     # Grouping by day of the week and calculating the median trip duration
-    med_trip_duration = cb.groupby('day_of_week')['median_trip_duration'].median().reset_index()
+    med_trip_duration = years.groupby('day_of_week')['median_trip_duration'].median().reset_index()
 
     # Plotting
     fig = px.bar(med_trip_duration, x ='day_of_week', y = 'median_trip_duration', 
@@ -106,10 +150,10 @@ with tab2:
     st.write("")
     
     # Grouping by season and obtaining median trip durations
-    seasonal_trips = cb.groupby('season')['median_trip_duration'].median().reset_index()
+    seasonal_trips = years.groupby('season')['median_trip_duration'].median().reset_index()
 
     # Plotting a box plot
-    fig = px.box(cb, x = 'season', y = 'median_trip_duration', title = 'Median Trip Durations by Season')
+    fig = px.box(years, x = 'season', y = 'median_trip_duration', title = 'Median Trip Durations by Season')
     fig.update_layout(width = 800, height = 600)
 
     # Showing the plot
@@ -142,7 +186,7 @@ with tab3:
     st.markdown("""
     - **The weather can significantly impact the number of bike trips and the length of the trip.**
     """)
-
+    
     column_name = {
     'Precipitation': 'prcp',
     'Snow': 'snow',
@@ -157,8 +201,8 @@ with tab3:
     #Select a season
     season = st.selectbox(
     "Select a season",
-    cb['season'].unique(),  
-    placeholder = "Select season...",
+    cb['season'].unique() 
+
 )
     
     # Selecting a feature
