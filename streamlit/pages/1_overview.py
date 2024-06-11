@@ -98,13 +98,17 @@ In total, there were **67,720,005** bike rides.
 # Tab 2: Time
 with tab2:
     st.title('Time')
-    med_trip_dur = cb['median_trip_duration'].median()
-    mean_trip_dur = cb['mean_trip_duration'].mean()
-    yearly_med_trip_dur = cb.groupby('year')['median_trip_duration'].median()
+    
+    cb['median_trip_duration'] = cb['median_trip_duration'] / 60
+    cb['mean_trip_duration'] = cb['mean_trip_duration'] / 60
+
+    med_trip_dur = round(cb['median_trip_duration'].median())
+    mean_trip_dur = round(cb['mean_trip_duration'].mean())
+    yearly_med_trip_dur = cb.groupby('year')['median_trip_duration'].median().round()
 
     st.markdown(f"""
-    - **The median trip duration is {med_trip_dur} seconds**
-    - **Average trip duration: {mean_trip_dur} seconds**
+    - **The median trip duration is {med_trip_dur} minutes**
+    - **Average trip duration: {mean_trip_dur} minutes**
     """)
 
     st.write(yearly_med_trip_dur)
@@ -164,11 +168,18 @@ with tab2:
     st.write("")
     
  #Grouping by year, month, season 
+
+#     month_dict = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+#               7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
+    
+#     cb['month'] = cb['month'].map(month_dict)
+
+    
     mon_year_season = cb.groupby(['year', 'month', 'season'])['median_trip_duration'].median().reset_index()
     mon_year_season['month_year_season'] = mon_year_season['month'].astype(str) + ' ' + mon_year_season['year'].astype(str) + ' ' + mon_year_season['season']
 
     fig = px.line(mon_year_season, x = 'month_year_season', y = 'median_trip_duration', 
-                  title = 'Number of Trips by Month, Year and Season',
+                  title = 'Median Trip Duration by Month, Year and Season',
                   labels = {'month_year_season': 'Month, Year and Season', 'median_trip_duration': 'Median Trip Duration'})
 
     fig.update_layout(width = 800, height = 600)
@@ -184,7 +195,16 @@ with tab2:
 with tab3:
     st.title('Weather')
     st.markdown("""
-    - **The weather can significantly impact the number of bike trips and the length of the trip.**
+    The weather data had over 50 columns filled with data, many of them were missing more than half their data. I decided using the following weather data:
+    - Precipitation
+    - Snow
+    - Average Wind Speed
+    - Average Relative Humidity
+    - Minimum Relative Humidity
+    - Maximum Relative Humidity
+    - Maximum Temperature
+    - Minimum Temperature
+    - Average Temperature
     """)
     
     column_name = {
@@ -198,26 +218,32 @@ with tab3:
     'Minimum Temperature': 'tmin',
     'Average Temperature': 'tavg'
     }
-    #Select a season
-    season = st.selectbox(
-    "Select a season",
-    cb['season'].unique() 
+    #adding all years to years list
+    year_options = ['All Years'] + cb['year'].unique().tolist()
 
+    #Select a year
+    select_year_weather = st.selectbox(
+    "Choose Year",
+    year_options
 )
+
+    #selected year will show data for that year
+    if select_year_weather == 'All Years':
+        years = cb
+    else:
+        years = cb[cb['year'] == select_year_weather]
     
     # Selecting a feature
     option = st.selectbox(
     "Select a feature",
     list(column_name.keys())
     )
-    
-    #getting data from the season that was selected.
-    season_data = cb[cb['season'] == season]
 
     # Create a histogram the selected season data.
-    fig = px.histogram(season_data, x = column_name[option], nbins = 20, 
+    fig = px.histogram(years, x = column_name[option], nbins = 20, 
                    title = f'Distribution of {option}',
-                   labels = {column_name[option]: f'{option}', 'count': 'Frequency'}
+                   labels = {column_name[option]: f'{option}', 'count': 'Frequency'},
+                    facet_col ='season'
                     )
 
 # Showing plot
