@@ -58,9 +58,36 @@ After splitting my dataset into training and testing sets, I performed standardi
     st.image(('../photos/shap_bar.png'), caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     
     
+with tab2:
     
+    st.markdown(""" Using the same Scikit-learn linear regression algorithm, This model is designed to forecast the median trip duration using the following set of features:
     
+    - Maxium daily temperture
+    - Average daily temperture
+    - If it snowed 
+    - If it rained 
+    - Day of week 
+    - If it was a holiday 
+    - Season 
+    - Month 
+    - Average wind speed 
+    - Average relative humidity  
+    - Minimum Relative Humidity
+    - Maximum Relative Humidity
+    - Whether an event occured 
+    """)
     
+    st.markdown(""" 
+After splitting my dataset into training and testing sets, I performed standardization and applied iterative imputation to handle missing data. I then fitted and predicted using a model with XGBoost. The results are as follows:
+
+- R-squared (R^2) score: 0.406
+- Mean Absolute Error (MAE): 84.099
+- Mean Squared Error (MSE): 12613.317
+- Standard Deviation (std): 146.063
+""")
+    
+    st.image(('../photos/shap_waterfall_med.png'), caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+    st.image(('../photos/shap_bar_med.png'), caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     
     
     

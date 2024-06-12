@@ -19,10 +19,12 @@ Let's break down the citibike data:
 
 - 2019: **20,551,697**
 - 2020: **19,506,857**
-- 2021: **27,661,451**
+- 2021: **27,648,252**
 
-In total, there were **67,720,005** bike rides.
+In total, there were **67,706,806** bike rides.
 """)
+    
+#     st.write(cb.groupby('year')['num_of_trips'].sum())
 
     st.write("")
     
@@ -82,7 +84,7 @@ In total, there were **67,720,005** bike rides.
    
     # Grouping by year, month, season 
     mon_year_season = cb.groupby(['year', 'month', 'season'])['num_of_trips'].sum().reset_index()
-    mon_year_season['month_year_season'] = mon_year_season['month'].astype(str) + ' ' + mon_year_season['year'].astype(str) + ' ' + mon_year_season['season']
+    mon_year_season['month_year_season'] = mon_year_season['month'].astype(str) + '/' + mon_year_season['year'].astype(str) + ' ' + mon_year_season['season']
 
     fig = px.line(mon_year_season, x = 'month_year_season', y = 'num_of_trips', 
                       title = 'Number of Trips by Month, Year and Season',
@@ -111,7 +113,7 @@ with tab2:
     - **Average trip duration: {mean_trip_dur} minutes**
     """)
 
-    st.write(yearly_med_trip_dur)
+    st.table(yearly_med_trip_dur)
     
     
     
@@ -176,7 +178,7 @@ with tab2:
 
     
     mon_year_season = cb.groupby(['year', 'month', 'season'])['median_trip_duration'].median().reset_index()
-    mon_year_season['month_year_season'] = mon_year_season['month'].astype(str) + ' ' + mon_year_season['year'].astype(str) + ' ' + mon_year_season['season']
+    mon_year_season['month_year_season'] = mon_year_season['month'].astype(str) + '/' + mon_year_season['year'].astype(str) + ' ' + mon_year_season['season']
 
     fig = px.line(mon_year_season, x = 'month_year_season', y = 'median_trip_duration', 
                   title = 'Median Trip Duration by Month, Year and Season',
